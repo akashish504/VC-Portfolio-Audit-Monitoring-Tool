@@ -1,0 +1,37 @@
+
+# ---- ingress.yaml ----
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pr-audit-ui-ingress
+  namespace: pr-audit
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # IP allowlist (S3): corporate CIDR + consultant egress ranges.
+    # 14.97.160.250/32 and 20.204.154.0/24 cover external consultant egress (split-tunnel: app traffic does not use the corporate range).
+    alb.ingress.kubernetes.io/inbound-cidrs: 163.116.128.0/17,20.204.154.0/24,14.97.160.250/32
+    alb.ingress.kubernetes.io/target-type: ip
+    # WAF associated declaratively so the LB Controller does not revert console-attached ACLs on deploy.
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:902468675910:regional/webacl/sc-insea-nonprod-web-acl/40feb747-6f3c-44e8-9d27-d08ec46bbc9d
+    # Access logs set declaratively so the LB Controller does not revert console-enabled logging on deploy.
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=aws-alb-access-logs-sc-insea-non-prod,access_logs.s3.prefix=alblogs/k8s-praudit-prauditu-038d8459f2
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:902468675910:certificate/bc4d282a-77cc-4c11-bbf2-4e0aa02eef0c
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/success-codes: "200"
+spec:
+  rules:
+    - host: pr-audit-dev.peakxvapps.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: pr-audit-ui-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

@@ -1,0 +1,66 @@
+name: Pipeline for Deploy - Production
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_OUTPUT: json
+  GIT_SHA: ${{ github.sha }}
+  ECR_REGISTRY: 105849548382.dkr.ecr.ap-southeast-1.amazonaws.com
+  ECR_REPOSITORY: pr-audit-api
+  EKS_CLUSTER: peakxv-master-prod-apps
+  EKS_REGION: ap-southeast-1
+  AWS_ROLE: arn:aws:iam::105849548382:role/peakxv-git-actions
+
+jobs:
+  build-push-to-ecr:
+    name: Building the Image, and push to ECR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.EKS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE }}
+          role-session-name: GitActionDeployment
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
+
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Configure kubectl to point to EKS cluster
+        run: |
+          aws eks update-kubeconfig --region ${{ env.EKS_REGION }} --name ${{ env.EKS_CLUSTER }}
+
+      - name: Deploy the new image
+        run: |
+          sed -i -e 's|{{GIT_SHA}}|'$GIT_SHA'|g' deployment/k8s/prod/deployments.yaml
+          cat deployment/k8s/prod/deployments.yaml
+          kubectl apply -f deployment/k8s/prod/serviceaccount.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/prod/deployments.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/prod/service.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/prod/ingress.yaml -n pr-audit
+          sleep 5
+          kubectl get pods -o wide -n pr-audit

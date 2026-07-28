@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pr-audit-api-deployment
+  namespace: pr-audit
+  labels:
+    app: pr-audit-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pr-audit-api
+  template:
+    metadata:
+      labels:
+        app: pr-audit-api
+    spec:
+      serviceAccountName: pr-audit-sa
+      containers:
+        - name: pr-audit-api
+          imagePullPolicy: Always
+          image: 902468675910.dkr.ecr.ap-southeast-1.amazonaws.com/peakxv-master-dev-pr-audit-api:{{GIT_SHA}}
+          securityContext:
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 2000m
+            requests:
+              memory: 0.5Gi
+              cpu: 500m
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: DOPPLER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pr-audit-ui-doppler-token  # Shared with frontend, already exists in pr-audit namespace
+                  key: DOPPLER_TOKEN
+            - name: OTEL_PYTHON_DISABLED_INSTRUMENTATIONS
+              value: "fastapi"
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3

@@ -1,0 +1,10 @@
+aws_region          = "ap-southeast-1"
+aws_account_id      = "105849548382"
+eks_cluster_name    = "peakxv-master-prod-apps"
+namespace           = "portfolio-review"
+app_name            = "portfolio-review-app-ui"
+image               = "105849548382.dkr.ecr.ap-southeast-1.amazonaws.com/peakxv-master-portfolio-review-app-ui:REPLACE_WITH_GIT_SHA"
+host                = "pr.peakxv.app"
+acm_certificate_arn = "arn:aws:acm:ap-southeast-1:105849548382:certificate/279a344e-798a-4128-b1cf-c0ed2920bd36"
+inbound_cidrs       = ["163.116.128.0/17"]
+doppler_secret_name = "portfolio-review-app-api-doppler-token"

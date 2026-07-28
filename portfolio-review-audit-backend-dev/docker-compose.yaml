@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=development
+      - DEBUG=true
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=tailoredAI
+      - POSTGRES_HOST=peakxv-test-db.cxok8ouastuu.eu-north-1.rds.amazonaws.com
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=peakxv_pr_tool
+    command: ["/app/entrypoint.sh"]
+    restart: always 

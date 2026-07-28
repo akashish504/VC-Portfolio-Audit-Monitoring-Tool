@@ -1,0 +1,472 @@
+{
+  "aliases": [
+    {
+      "label_normalized": "net loss after tax for the year from continuing operations",
+      "document_label": "net loss after tax for the year from continuing operations",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss",
+      "key": "profit_loss_for_the_period_of_continuing_operation",
+      "full_path": "profit_and_loss.profit_loss_for_the_period_of_continuing_operation",
+      "count": 4,
+      "examples": [
+        "net loss after tax for the year from continuing operations"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "loss profit before tax from discontinued operations",
+      "document_label": "loss profit before tax from discontinued operations",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss",
+      "key": "profit_loss_from_discontinued_operations",
+      "full_path": "profit_and_loss.profit_loss_from_discontinued_operations",
+      "count": 4,
+      "examples": [
+        "loss profit before tax from discontinued operations"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "tax expense for discontinued operations",
+      "document_label": "tax expense for discontinued operations",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss",
+      "key": "tax_expense_for_discontinued_operation",
+      "full_path": "profit_and_loss.tax_expense_for_discontinued_operation",
+      "count": 4,
+      "examples": [
+        "tax expense for discontinued operations"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "foreign currency translation",
+      "document_label": "foreign currency translation",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss.other_comprehensive_income",
+      "key": "b_items_that_will_be_reclassified_to_profit_or_loss",
+      "full_path": "profit_and_loss.other_comprehensive_income.b_items_that_will_be_reclassified_to_profit_or_loss",
+      "count": 4,
+      "examples": [
+        "foreign currency translation"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "remeasurement loss on defined benefit plans",
+      "document_label": "remeasurement loss on defined benefit plans",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss.other_comprehensive_income",
+      "key": "a_items_that_will_not_be_reclassified_to_profit_or_loss",
+      "full_path": "profit_and_loss.other_comprehensive_income.a_items_that_will_not_be_reclassified_to_profit_or_loss",
+      "count": 4,
+      "examples": [
+        "remeasurement loss on defined benefit plans"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "total comprehensive profit loss for the year",
+      "document_label": "total comprehensive profit loss for the year",
+      "section_hint": "profit_and_loss",
+      "parent_path": "profit_and_loss",
+      "key": "total_comprehensive_income_for_the_period",
+      "full_path": "profit_and_loss.total_comprehensive_income_for_the_period",
+      "count": 4,
+      "examples": [
+        "total comprehensive profit loss for the year"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "investment in securities",
+      "document_label": "investment in securities",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.non_current_assets.financial_assets",
+      "key": "investments",
+      "full_path": "balance_sheet.assets.non_current_assets.financial_assets.investments",
+      "count": 4,
+      "examples": [
+        "investment in securities"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "other receivables",
+      "document_label": "other receivables",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.non_current_assets.financial_assets",
+      "key": "others",
+      "full_path": "balance_sheet.assets.non_current_assets.financial_assets.others",
+      "count": 4,
+      "examples": [
+        "other receivables"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "deferred tax asset",
+      "document_label": "deferred tax asset",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.non_current_assets",
+      "key": "deferred_tax_assets_net",
+      "full_path": "balance_sheet.assets.non_current_assets.deferred_tax_assets_net",
+      "count": 4,
+      "examples": [
+        "deferred tax asset"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "investment in securities",
+      "document_label": "investment in securities",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.current_assets.financial_assets",
+      "key": "investments",
+      "full_path": "balance_sheet.assets.current_assets.financial_assets.investments",
+      "count": 4,
+      "examples": [
+        "investment in securities"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "loan receivable",
+      "document_label": "loan receivable",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.current_assets.financial_assets",
+      "key": "loans",
+      "full_path": "balance_sheet.assets.current_assets.financial_assets.loans",
+      "count": 4,
+      "examples": [
+        "loan receivable"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "prepayments",
+      "document_label": "prepayments",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.current_assets",
+      "key": "other_current_assets",
+      "full_path": "balance_sheet.assets.current_assets.other_current_assets",
+      "count": 4,
+      "examples": [
+        "prepayments"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "cash and short term deposits",
+      "document_label": "cash and short term deposits",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.assets.current_assets.financial_assets",
+      "key": "cash_and_cash_equivalents",
+      "full_path": "balance_sheet.assets.current_assets.financial_assets.cash_and_cash_equivalents",
+      "count": 4,
+      "examples": [
+        "cash and short term deposits"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "other reserves",
+      "document_label": "other reserves",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.equity",
+      "key": "other_equity",
+      "full_path": "balance_sheet.equity.other_equity",
+      "count": 4,
+      "examples": [
+        "other reserves"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "provision",
+      "document_label": "provision",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.liabilities.non_current_liabilities",
+      "key": "provisions",
+      "full_path": "balance_sheet.liabilities.non_current_liabilities.provisions",
+      "count": 4,
+      "examples": [
+        "provision"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "contract liabilities",
+      "document_label": "contract liabilities",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.liabilities.current_liabilities",
+      "key": "other_current_liabilities",
+      "full_path": "balance_sheet.liabilities.current_liabilities.other_current_liabilities",
+      "count": 4,
+      "examples": [
+        "contract liabilities"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "provision",
+      "document_label": "provision",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.liabilities.current_liabilities",
+      "key": "provisions",
+      "full_path": "balance_sheet.liabilities.current_liabilities.provisions",
+      "count": 4,
+      "examples": [
+        "provision"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "liabilities for current taxes",
+      "document_label": "liabilities for current taxes",
+      "section_hint": "balance_sheet",
+      "parent_path": "balance_sheet.liabilities.current_liabilities",
+      "key": "current_tax_liabilities_net",
+      "full_path": "balance_sheet.liabilities.current_liabilities.current_tax_liabilities_net",
+      "count": 4,
+      "examples": [
+        "liabilities for current taxes"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "profit loss before tax from continued operations",
+      "document_label": "profit loss before tax from continued operations",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities",
+      "key": "profit_before_tax",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.profit_before_tax",
+      "count": 4,
+      "examples": [
+        "profit loss before tax from continued operations"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "depreciation of property plant and equipment",
+      "document_label": "depreciation of property plant and equipment",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income",
+      "key": "depreciation_and_amortization",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income.depreciation_and_amortization",
+      "count": 4,
+      "examples": [
+        "depreciation of property plant and equipment"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "esop expenses",
+      "document_label": "esop expenses",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income",
+      "key": "share_based_incentive_compensation",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income.share_based_incentive_compensation",
+      "count": 4,
+      "examples": [
+        "esop expenses"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "property plant and equipment written off",
+      "document_label": "property plant and equipment written off",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income",
+      "key": "impairment_of_assets",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income.impairment_of_assets",
+      "count": 4,
+      "examples": [
+        "property plant and equipment written off"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "provision for doubtful and bad debts bad debts written off",
+      "document_label": "provision for doubtful and bad debts bad debts written off",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income",
+      "key": "provision_for_bad_debt_expense",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income.provision_for_bad_debt_expense",
+      "count": 4,
+      "examples": [
+        "provision for doubtful and bad debts bad debts written off"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "unrealised exchange differences",
+      "document_label": "unrealised exchange differences",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income",
+      "key": "foreign_currency_transactions",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.adjustments_to_reconcile_net_income.foreign_currency_transactions",
+      "count": 4,
+      "examples": [
+        "unrealised exchange differences"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "increase in trade and other receivables",
+      "document_label": "increase in trade and other receivables",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities",
+      "key": "decrease_increase_in_trade_receivables",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities.decrease_increase_in_trade_receivables",
+      "count": 4,
+      "examples": [
+        "increase in trade and other receivables"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "increase in prepayments",
+      "document_label": "increase in prepayments",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities",
+      "key": "decrease_increase_in_other_assets_net",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities.decrease_increase_in_other_assets_net",
+      "count": 4,
+      "examples": [
+        "increase in prepayments"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "increase in trade and other payables",
+      "document_label": "increase in trade and other payables",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities",
+      "key": "increase_decrease_in_operating_accounts_payable",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.changes_in_operating_assets_and_liabilities.increase_decrease_in_operating_accounts_payable",
+      "count": 4,
+      "examples": [
+        "increase in trade and other payables"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "direct taxes received paid net of refunds",
+      "document_label": "direct taxes received paid net of refunds",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_operating_activities",
+      "key": "income_taxes_paid",
+      "full_path": "cash_flow_statement.cash_flows_from_operating_activities.income_taxes_paid",
+      "count": 4,
+      "examples": [
+        "direct taxes received paid net of refunds"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "purchase of property plant and equipment intangible assets and intangible assets under development",
+      "document_label": "purchase of property plant and equipment intangible assets and intangible assets under development",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_investing_activities",
+      "key": "acquisition_proceeds_from_sale_of_property_plant_and_equipment",
+      "full_path": "cash_flow_statement.cash_flows_from_investing_activities.acquisition_proceeds_from_sale_of_property_plant_and_equipment",
+      "count": 4,
+      "examples": [
+        "purchase of property plant and equipment intangible assets and intangible assets under development"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "acquisition of subsidiary",
+      "document_label": "acquisition of subsidiary",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_investing_activities",
+      "key": "acquisition_sale_of_a_business_net_of_cash_and_cash_equivalents_acquired_or_sold",
+      "full_path": "cash_flow_statement.cash_flows_from_investing_activities.acquisition_sale_of_a_business_net_of_cash_and_cash_equivalents_acquired_or_sold",
+      "count": 4,
+      "examples": [
+        "acquisition of subsidiary"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "sale purchase of current investment net",
+      "document_label": "sale purchase of current investment net",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_investing_activities",
+      "key": "acquisition_sale_of_equity_securities",
+      "full_path": "cash_flow_statement.cash_flows_from_investing_activities.acquisition_sale_of_equity_securities",
+      "count": 4,
+      "examples": [
+        "sale purchase of current investment net"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "payment on buyback of preference shares",
+      "document_label": "payment on buyback of preference shares",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_financing_activities",
+      "key": "repurchases_of_equity_securities",
+      "full_path": "cash_flow_statement.cash_flows_from_financing_activities.repurchases_of_equity_securities",
+      "count": 4,
+      "examples": [
+        "payment on buyback of preference shares"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "payment of lease rent",
+      "document_label": "payment of lease rent",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_flows_from_financing_activities",
+      "key": "principal_payments_under_capital_lease_obligations",
+      "full_path": "cash_flow_statement.cash_flows_from_financing_activities.principal_payments_under_capital_lease_obligations",
+      "count": 4,
+      "examples": [
+        "payment of lease rent"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "increase decrease in cash and cash equivalents",
+      "document_label": "increase decrease in cash and cash equivalents",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash",
+      "key": "net_change_during_the_period",
+      "full_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash.net_change_during_the_period",
+      "count": 4,
+      "examples": [
+        "increase decrease in cash and cash equivalents"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "cash and cash equivalents as at the beginning of the period",
+      "document_label": "cash and cash equivalents as at the beginning of the period",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash",
+      "key": "balance_beginning_of_period",
+      "full_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash.balance_beginning_of_period",
+      "count": 4,
+      "examples": [
+        "cash and cash equivalents as at the beginning of the period"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    },
+    {
+      "label_normalized": "cash and cash equivalents as at year end",
+      "document_label": "cash and cash equivalents as at year end",
+      "section_hint": "cash_flow_statement",
+      "parent_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash",
+      "key": "balance_end_of_period",
+      "full_path": "cash_flow_statement.cash_cash_equivalents_and_restricted_cash.balance_end_of_period",
+      "count": 4,
+      "examples": [
+        "cash and cash equivalents as at year end"
+      ],
+      "updated_by": "run_hybrid_mapping --teach"
+    }
+  ]
+}

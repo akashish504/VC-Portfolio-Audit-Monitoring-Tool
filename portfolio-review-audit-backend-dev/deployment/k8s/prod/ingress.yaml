@@ -1,0 +1,35 @@
+# ---- prod ingress.yaml ----
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pr-audit-api-ingress
+  namespace: pr-audit
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    # Prod ACM cert (account 105849548382). *.peakxvapps.net does NOT exist in prod;
+    # *.peakxv.app chosen to match the host below. TODO(prod): confirm domain choice.
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:105849548382:certificate/279a344e-798a-4128-b1cf-c0ed2920bd36
+    # Public subnets of the prod EKS VPC (vpc-04c03eb896a13df93), for the internet-facing ALB.
+    # The ALB is the only public surface: it terminates TLS and forwards (target-type: ip) to
+    # pods that live in PRIVATE subnets with no public IPs, so the backend itself stays private.
+    alb.ingress.kubernetes.io/subnets: subnet-0f379d1bd5a6748fc, subnet-06bae993d459ee575
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/success-codes: "200"
+spec:
+  rules:
+    - host: pr-audit-api.peakxv.app
+      http:
+        paths:
+          - backend:
+              service:
+                name: pr-audit-api-service
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix

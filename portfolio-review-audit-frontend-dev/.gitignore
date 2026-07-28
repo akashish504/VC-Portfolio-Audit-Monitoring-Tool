@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+.env
+.env.example
+.env.local
+
+# Claude Code context & planning docs (never commit)
+CLAUDE.md
+DASHBOARD_PLAN.md

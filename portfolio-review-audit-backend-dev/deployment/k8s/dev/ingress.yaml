@@ -1,0 +1,46 @@
+
+# ---- ingress.yaml ----
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pr-audit-api-ingress
+  namespace: pr-audit
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:902468675910:certificate/bc4d282a-77cc-4c11-bbf2-4e0aa02eef0c
+    # WAF (EXT-H1): set via annotation so the LB Controller re-attaches it on every
+    # deploy — a console-attached ACL gets reverted on the next reconcile.
+    # Dev/nonprod ACL (account 902468675910), mirrors the prod manifest.
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:902468675910:regional/webacl/sc-insea-nonprod-web-acl/40feb747-6f3c-44e8-9d27-d08ec46bbc9d
+    # ALB access logs (S2): set via annotation so the LB Controller keeps them enabled
+    # on every deploy — console-enabled logging gets reverted on the next reconcile.
+    # Single line, no spaces: the controller splits the value on ',' without trimming.
+    # Dev/nonprod bucket (account 902468675910), mirrors the prod manifest.
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=aws-alb-access-logs-sc-insea-non-prod,access_logs.s3.prefix=alblogs/k8s-praudit-praudita-4cc7c7162a
+    # IP allowlist (S3): restrict the ALB to the corporate egress CIDR so only office/VPN
+    # traffic reaches the app, ahead of JWT + WAF. Set via annotation so the LB Controller
+    # re-asserts it on every deploy — console-set listener rules get reverted on reconcile.
+    # conditions.<name> must match the backend serviceName; it is AND-ed with the host rule.
+    # Non-matching source IPs match no rule and hit the listener default action (404).
+    alb.ingress.kubernetes.io/conditions.pr-audit-api-service: '[{"field":"source-ip","sourceIpConfig":{"values":["163.116.128.0/17","20.204.154.0/24","14.97.160.250/32"]}}]'
+    alb.ingress.kubernetes.io/subnets: subnet-01020ccaa1949a537, subnet-0f32a4ec972000b73
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/success-codes: "200"
+spec:
+  rules:
+    - host: pr-audit-api-dev.peakxvapps.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: pr-audit-api-service
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix

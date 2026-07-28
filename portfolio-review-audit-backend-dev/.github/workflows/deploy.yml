@@ -1,0 +1,112 @@
+name: Pipeline for Deploy
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+    branches:
+      - dev
+      # Pushes to master deploy to prod (setup-k8s-deployment-vars@v3 maps the branch
+      # to k8s-deployment-env=prod -> EKS cluster peakxv-master-prod-apps).
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_OUTPUT: json
+  GIT_SHA: ${{ github.sha }}
+  NAME_PREFIX: peakxv-master
+  ECR_REPOSITORY_BASE: pr-audit-api
+  EKS_CLUSTER_BASE: "peakxv-master-ENV-apps"
+
+jobs:
+  build-push-to-ecr:
+    name: Building the Image, and push to ECR
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
+      ecr-repository: ${{ steps.build-image.outputs.ecr-repository }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - id: setup-k8s-deployment-vars
+        uses: scdt-indiasea/workflows/.github/actions/setup-k8s-deployment-vars@v3
+        with:
+          deployment-branch: ${{ github.ref_name }}
+          eks-cluster-base: ${{ env.EKS_CLUSTER_BASE }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ steps.setup-k8s-deployment-vars.outputs.eks-region }}
+          role-to-assume: ${{ steps.setup-k8s-deployment-vars.outputs.aws-role }}
+          role-session-name: GitActionDeployment
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ format('{0}{1}-{2}', env.NAME_PREFIX, steps.setup-k8s-deployment-vars.outputs.ecr-repository-suffix, env.ECR_REPOSITORY_BASE) }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
+
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REPOSITORY:$IMAGE_TAG
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Configure kubectl to point to eks cluster
+        env:
+          K8S_DEPLOYMENT_ENV: ${{ steps.setup-k8s-deployment-vars.outputs.k8s-deployment-env }}
+          EKS_REGION: ${{ steps.setup-k8s-deployment-vars.outputs.eks-region }}
+        run: |
+          if [ "${{ env.K8S_DEPLOYMENT_ENV }}" == "prod" ]; then
+            EKS_CLUSTER='peakxv-master-prod-apps'
+          else
+            EKS_CLUSTER='peakxv-master-dev-apps'
+          fi
+
+          aws eks update-kubeconfig --region $EKS_REGION --name $EKS_CLUSTER
+
+      - name: Deploy the new image
+        env:
+          K8S_DEPLOYMENT_ENV: ${{ steps.setup-k8s-deployment-vars.outputs.k8s-deployment-env }}
+        run: |
+          sed -i -e 's|{{GIT_SHA}}|'$GIT_SHA'|g' deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/deployments.yaml
+          cat deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/deployments.yaml
+          kubectl apply -f deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/deployments.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/service.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/ingress.yaml -n pr-audit
+          kubectl apply -f deployment/k8s/${{ env.K8S_DEPLOYMENT_ENV }}/serviceaccount.yaml -n pr-audit
+          sleep 5
+          kubectl get pods -o wide -n pr-audit
+
+      - name: Slack Notification for Success
+        if: success()
+        uses: scdt-indiasea/action-slack-notify@v1
+        env:
+          SLACK_CHANNEL: ${{ steps.setup-k8s-deployment-vars.outputs.slack-channel }}
+          SLACK_COLOR: ''
+          SLACK_MESSAGE: 'Deployment for ${{ env.ECR_REPOSITORY_BASE }} success :rocket:'
+          SLACK_TITLE: Deployment for ${{ env.ECR_REPOSITORY_BASE }} success
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Slack Notification for Failure
+        if: failure()
+        uses: scdt-indiasea/action-slack-notify@v1
+        env:
+          SLACK_CHANNEL: ${{ steps.setup-k8s-deployment-vars.outputs.slack-channel }}
+          SLACK_COLOR: '#3278BD'
+          SLACK_MESSAGE: 'Deployment for ${{ env.ECR_REPOSITORY_BASE }} failed :x:'
+          SLACK_TITLE: Deployment for ${{ env.ECR_REPOSITORY_BASE }} failed
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

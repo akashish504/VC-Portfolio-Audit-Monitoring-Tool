@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pr-audit-ui-deployment
+  namespace: pr-audit
+  labels:
+    app: pr-audit-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pr-audit-ui
+  template:
+    metadata:
+      labels:
+        app: pr-audit-ui
+    spec:
+      containers:
+        - name: pr-audit-ui
+          imagePullPolicy: Always
+          image: 902468675910.dkr.ecr.ap-southeast-1.amazonaws.com/peakxv-master-dev-pr-audit-ui:{{GIT_SHA}}
+          securityContext:
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              memory: 800Mi
+              cpu: 500m
+            requests:
+              memory: 400Mi
+              cpu: 250m
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: DOPPLER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pr-audit-ui-doppler-token  # Create this K8s secret before first deploy
+                  key: DOPPLER_TOKEN
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5

@@ -1,0 +1,15 @@
+# ---- prod service.yaml ----
+apiVersion: v1
+kind: Service
+metadata:
+  name: pr-audit-api-service
+  namespace: pr-audit
+spec:
+  type: ClusterIP
+  selector:
+    app: pr-audit-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: 8000

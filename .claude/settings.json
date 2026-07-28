@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(PGPASSWORD=tailoredAI psql 'host=peakxv-test-db.cxok8ouastuu.eu-north-1.rds.amazonaws.com port=5432 dbname=peakxv_pr_tool user=postgres sslmode=require' -c ' *)",
+      "Bash(pipenv run *)",
+      "Bash(.venv/bin/python -)"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+name: Terraform Prod Apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Git SHA/image tag to deploy"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TF_WORKING_DIR: infra/terraform/k8s-app
+
+jobs:
+  apply-prod:
+    name: Apply Terraform to Prod
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials (prod apply role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-southeast-1
+          role-to-assume: ${{ secrets.TERRAFORM_PROD_APPLY_ROLE_ARN }}
+          role-session-name: TerraformProdApply
+
+      - name: Guardrail check inputs
+        run: |
+          if [ -z "${{ github.event.inputs.image_tag }}" ]; then
+            echo "image_tag is required"
+            exit 1
+          fi
+
+      - name: Terraform Init (remote backend)
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -backend-config=backend-prod.hcl
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan (prod)
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform plan -input=false -out=tfplan \
+            -var-file=environments/prod.tfvars \
+            -var "image=105849548382.dkr.ecr.ap-southeast-1.amazonaws.com/peakxv-master-portfolio-review-app-ui:${{ github.event.inputs.image_tag }}"
+
+      - name: Terraform Apply (prod)
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -input=false -auto-approve tfplan

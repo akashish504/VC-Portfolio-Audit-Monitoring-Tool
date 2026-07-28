@@ -1,0 +1,29 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Claude Code context & planning docs (never commit)
+CLAUDE.md
+DASHBOARD_PLAN.md

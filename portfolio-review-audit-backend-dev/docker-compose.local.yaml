@@ -1,0 +1,11 @@
+# Local PostgreSQL only — matches defaults in src/configs/env.py and .env.example
+# Usage: docker compose -f docker-compose.local.yaml up -d
+services:
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tailoredAI
+      POSTGRES_DB: peakxv_pr_tool
